@@ -1,0 +1,75 @@
+{
+  "name": "portfolio-kone-ahmed-djakaridja",
+  "version": "1.0.0",
+  "description": "Portfolio web moderne et captivant de KONE Ahmed Djakaridja - Développeur Full-Stack",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Static site - no build required'",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "portfolio",
+    "developer",
+    "full-stack",
+    "web-design",
+    "html5",
+    "css3",
+    "javascript"
+  ],
+  "author": "KONE Ahmed Djakaridja",
+  "email": "ahmedkone.djaka@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mon_portfolio.git"
+  },
+  "location": "Abidjan, Côte d'Ivoire",
+  "phone": "+225 07 883 869 67",
+  "license": "MIT",
+  "technologies": {
+    "frontend": [
+      "HTML5",
+      "CSS3",
+      "JavaScript (Vanilla)",
+      "Bootstrap"
+    ],
+    "backend": [
+      "PHP",
+      "Laravel"
+    ],
+    "database": [
+      "MySQL",
+      "SQLite"
+    ],
+    "tools": [
+      "Git",
+      "GitHub",
+      "GitLab",
+      "Figma",
+      "Canva",
+      "Photoshop",
+      "Illustrator",
+      "WordPress"
+    ]
+  },
+  "portfolio_sections": {
+    "hero": "Présentation captivante avec animation",
+    "about": "Informations personnelles et statistiques",
+    "skills": "Compétences techniques avec barres de progression",
+    "projects": "Projets phares avec overlay interactif",
+    "experience": "Timeline professionnelle",
+    "education": "Formation et diplômes",
+    "contact": "Formulaire de contact et informations"
+  },
+  "features": [
+    "Design moderne et élégant",
+    "Animations fluides et engageantes",
+    "Complètement responsive",
+    "Navigation intuitive",
+    "Formulaire de contact interactif",
+    "Raccourcis clavier",
+    "Performance optimisée",
+    "Accessible"
+  ]
+}

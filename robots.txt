@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+
+Sitemap: https://kone-ahmed-portfolio.com/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay for polite crawlers
+Crawl-delay: 1

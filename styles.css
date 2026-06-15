@@ -434,10 +434,7 @@ a:hover {
 }
 
 .about-content {
-    display: grid;
-    grid-template-columns: minmax(250px, 320px) 1fr;
-    gap: 4rem;
-    align-items: center;
+    display: block;
 }
 
 .about-headshot {
@@ -735,7 +732,6 @@ a:hover {
 }
 
 .projects-grid {
-    display: grid;
     gap: 2rem;
 }
 
@@ -744,6 +740,7 @@ a:hover {
     flex-wrap: wrap;
     gap: 0;
     align-items: stretch;
+    min-width: 0;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(0, 212, 255, 0.16);
     border-radius: 20px;
@@ -761,7 +758,7 @@ a:hover {
 
 .project-image {
     flex: 0 0 38%;
-    min-width: 320px;
+    min-width: 0;
     min-height: 280px;
     position: relative;
     overflow: hidden;
@@ -783,7 +780,7 @@ a:hover {
 .project-content {
     flex: 1;
     padding: 2.2rem 2rem;
-    min-width: 260px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

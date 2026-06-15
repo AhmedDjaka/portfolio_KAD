@@ -434,7 +434,29 @@ a:hover {
 }
 
 .about-content {
-    display: block;
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(400px, 1fr);
+    grid-template-areas:
+        "profile content"
+        "stats docs";
+    gap: 2rem;
+    align-items: start;
+}
+
+.about-content > .col-12.col-lg-3 {
+    grid-area: profile;
+}
+
+.about-content > .col-12.col-lg-5 {
+    grid-area: content;
+}
+
+.about-content > .col-12.col-lg-4 {
+    grid-area: stats;
+}
+
+.about-content > .col-12:last-child {
+    grid-area: docs;
 }
 
 .about-headshot {
@@ -1600,7 +1622,19 @@ a:hover {
     }
 
     .about-content {
-        display: block;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .about-content > .col-12.col-lg-3,
+    .about-content > .col-12.col-lg-5,
+    .about-content > .col-12.col-lg-4 {
+        grid-area: auto;
+    }
+
+    .about-content > .col-12:last-child {
+        grid-area: auto;
     }
 
     .about-stats {
@@ -1615,13 +1649,28 @@ a:hover {
 @media (min-width: 1025px) {
     .about-content {
         display: grid !important;
-        grid-template-columns: minmax(260px, 280px) minmax(360px, 1fr) minmax(300px, 340px) !important;
+        grid-template-columns: minmax(260px, 320px) minmax(400px, 1fr) !important;
+        grid-template-areas:
+            "profile content"
+            "stats docs" !important;
         gap: 2rem !important;
         align-items: start !important;
     }
 
-    .about-content > .col-12 {
-        grid-column: 1 / -1 !important;
+    .about-content > .col-12.col-lg-3 {
+        grid-area: profile !important;
+    }
+
+    .about-content > .col-12.col-lg-5 {
+        grid-area: content !important;
+    }
+
+    .about-content > .col-12.col-lg-4 {
+        grid-area: stats !important;
+    }
+
+    .about-content > .col-12:last-child {
+        grid-area: docs !important;
     }
 
     .about-stat-block,

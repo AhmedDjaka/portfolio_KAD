@@ -12,7 +12,7 @@ Ce guide vous explique comment déployer votre portfolio en ligne gratuitement o
    - Allez dans Settings > Pages
    - Sélectionnez "Deploy from a branch"
    - Choisissez `main` ou `master` comme branche
-5. **Accédez à votre portfolio**: `https://username.github.io/mon_portfolio`
+5. **Accédez à votre portfolio**: `https://ahmeddjaka.github.io/portfolio_KAD/`
 
 ### Avantages:
 - ✅ 100% Gratuit

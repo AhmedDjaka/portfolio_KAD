@@ -1648,6 +1648,50 @@ a:hover {
     }
 }
 
+/* Additional mobile fixes to avoid clipping and large hero on small viewports */
+@media (max-width: 900px) {
+    .hero {
+        min-height: 60vh;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .about-headshot img {
+        max-width: 180px;
+        height: auto;
+    }
+
+    .about-headshot p {
+        font-size: 1rem;
+    }
+
+    .about-text p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .project-image {
+        min-height: 180px;
+    }
+
+    .stat-card {
+        min-height: 120px;
+        padding: 1.2rem 1rem;
+    }
+
+    /* ensure no horizontal overflow from large fixed-width elements */
+    img, iframe {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* reduce large top paddings that can push content off-screen */
+    .container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}
+
 @media (min-width: 901px) {
     .about-content {
         display: grid !important;

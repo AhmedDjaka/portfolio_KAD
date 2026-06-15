@@ -1603,7 +1603,7 @@ a:hover {
    RESPONSIVE DESIGN
    ===================== */
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
     .section-title {
         font-size: 2.5rem;
     }
@@ -1648,7 +1648,7 @@ a:hover {
     }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 901px) {
     .about-content {
         display: grid !important;
         grid-template-columns: minmax(260px, 320px) minmax(400px, 1fr) !important;

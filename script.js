@@ -73,36 +73,83 @@ window.addEventListener('scroll', () => {
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Get form data
         const formData = new FormData(contactForm);
-        const name = contactForm.children[0].children[0].value;
-        const email = contactForm.children[1].children[0].value;
-        const subject = contactForm.children[2].children[0].value;
-        const message = contactForm.children[3].children[0].value;
+        const payload = Object.fromEntries(formData.entries());
 
-        // Validate
-        if (!name || !email || !message) {
+        if (!payload.name || !payload.email || !payload.message) {
             showNotification('Veuillez remplir tous les champs requis', 'error');
             return;
         }
 
-        // Simulate form submission
         const button = contactForm.querySelector('button');
         const originalText = button.textContent;
         button.textContent = 'Envoi en cours...';
         button.disabled = true;
 
-        setTimeout(() => {
-            showNotification('Message envoyé avec succès! Je vous recontacterai bientôt.', 'success');
+        try {
+            const res = await fetch('/.netlify/functions/sendEmail', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Erreur lors de l\'envoi');
+            }
+
+            showNotification('Message envoyé avec succès! Confirmation envoyée à votre adresse.', 'success');
             contactForm.reset();
+            openContactModal('Message envoyé', 'Merci — votre message a bien été envoyé. Je reviendrai vers vous dès que possible. Vérifiez votre boîte mail pour la confirmation.');
+        } catch (err) {
+            console.error(err);
+            showNotification('Erreur lors de l\'envoi du message. Réessayez plus tard.', 'error');
+        } finally {
             button.textContent = originalText;
             button.disabled = false;
-        }, 1500);
+        }
     });
 }
+
+// =====================
+// CONTACT MODAL LOGIC
+// =====================
+
+function openContactModal(title, message) {
+    const modal = document.getElementById('contactModal');
+    if (!modal) return;
+    const t = modal.querySelector('#contactModalTitle');
+    const m = modal.querySelector('#contactModalMessage');
+    if (t) t.textContent = title;
+    if (m) m.innerHTML = message.replace(/\n/g, '<br/>');
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeContactModal() {
+    const modal = document.getElementById('contactModal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+}
+
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('contactModal');
+    if (!modal || !modal.classList.contains('open')) return;
+    if (e.target.classList.contains('contact-modal-close') || e.target.classList.contains('contact-modal-ok')) {
+        closeContactModal();
+    }
+    if (e.target.classList.contains('contact-modal-backdrop')) {
+        closeContactModal();
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeContactModal();
+});
 
 // =====================
 // NOTIFICATIONS

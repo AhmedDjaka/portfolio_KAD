@@ -51,17 +51,19 @@
                 src="images/profile-photo.jpg"
                 alt="Photo de profil de KONE AHMED DJAKARIDJA"
               />
-              <p>Voici ma photo de profil</p>
+              <!-- <p>Voici ma photo de profil</p> -->
             </div>
           </div>
           <div class="col-12 col-lg-5">
             <div class="about-text">
               <p>
-                Je suis <strong>KONE AHMED DJAKARIDJA</strong>, un développeur
-                Full-Stack passionné basé en Côte d'Ivoire. Avec une expertise en
+                s <strong>KONE AHMED DJAKARIDJA</strong>, développeur
+                Web / Mobile passionné. Avec une expertise en
                 conception et développement de solutions logicielles performantes,
                 je combines rigueur technique et créativité pour transformer des
                 idées complexes en applications intuitives.
+                Ma démarche repose sur trois priorités : comprendre les enjeux du projet, 
+                proposer une architecture adaptée et offrir une expérience utilisateur soignée.
               </p>
               <p>
                 Mon approche :
@@ -716,16 +718,17 @@
 
           <form class="contact-form" id="contactForm">
             <div class="form-group">
-              <input type="text" placeholder="Votre nom" required />
+              <input type="text" name="name" placeholder="Votre nom" required />
             </div>
             <div class="form-group">
-              <input type="email" placeholder="Votre email" required />
+              <input type="email" name="email" placeholder="Votre email" required />
             </div>
             <div class="form-group">
-              <input type="text" placeholder="Sujet" />
+              <input type="text" name="subject" placeholder="Sujet" />
             </div>
             <div class="form-group">
               <textarea
+                name="message"
                 placeholder="Votre message"
                 rows="5"
                 required
@@ -742,11 +745,23 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 KONE AHMED DJAKARIDJA. Tous droits réservés.</p>
-        <p>Développé avec <span class="heart">❤</span> par KAD</p>
+        <p>&copy; 2026 KONE AHMED DJAKARIDJA. Tous droits réservés.</p>
+        <p>Développé  par KAD</p>
       </div>
     </footer>
 
     <script src="script.js"></script>
+    <!-- Confirmation Modal -->
+    <div id="contactModal" class="contact-modal" aria-hidden="true">
+      <div class="contact-modal-backdrop"></div>
+      <div class="contact-modal-inner" role="dialog" aria-modal="true">
+        <button class="contact-modal-close" aria-label="Fermer">&times;</button>
+        <h3 id="contactModalTitle">Message envoyé</h3>
+        <p id="contactModalMessage">Merci — votre message a bien été envoyé. Je vous contacterai bientôt.</p>
+        <div class="contact-modal-actions">
+          <button class="btn btn-primary contact-modal-ok">Fermer</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

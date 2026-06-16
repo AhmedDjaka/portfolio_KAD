@@ -27,6 +27,9 @@
   "location": "Abidjan, Côte d'Ivoire",
   "phone": "+225 07 883 869 67",
   "license": "MIT",
+  "dependencies": {
+    "nodemailer": "^6.9.5"
+  },
   "technologies": {
     "frontend": [
       "HTML5",

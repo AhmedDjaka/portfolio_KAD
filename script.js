@@ -418,6 +418,37 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+let galleryLightboxState = {
+    items: [],
+    currentIndex: 0
+};
+
+function resolveGalleryImagePath(imagePath) {
+    if (!imagePath) return '';
+    if (/^https?:\/\//i.test(imagePath)) return imagePath;
+    if (imagePath.startsWith('images_graphique/')) return imagePath;
+    return `images_graphique/${imagePath}`;
+}
+
+function normalizeGalleryImages(item) {
+    if (Array.isArray(item.images) && item.images.length > 0) {
+        return item.images.map((image) => {
+            const src = typeof image === 'string' ? image : image.file;
+            return {
+                src: resolveGalleryImagePath(src),
+                title: (typeof image === 'string' ? item.title : image.title) || item.title,
+                description: (typeof image === 'string' ? item.description : image.description) || item.description
+            };
+        });
+    }
+
+    return [{
+        src: resolveGalleryImagePath(item.file),
+        title: item.title,
+        description: item.description
+    }];
+}
+
 function loadGalleryCards() {
     const galleryGrid = document.getElementById('galleryGrid');
     if (!galleryGrid) return;
@@ -436,13 +467,18 @@ function loadGalleryCards() {
             }
 
             const cards = items.map(item => {
-                const imagePath = `images_graphique/${item.file}`;
+                const galleryImages = normalizeGalleryImages(item);
+                const previewImage = galleryImages[0];
+                const imageCount = galleryImages.length;
+                const badge = imageCount > 1 ? `<span class="gallery-card-badge">${imageCount} photos</span>` : '';
+
                 return `
-                    <div class="gallery-card">
-                        <img src="${imagePath}" alt="${item.title}">
+                    <div class="gallery-card" data-gallery-images='${JSON.stringify(galleryImages)}'>
+                        ${badge}
+                        <img src="${previewImage.src}" alt="${previewImage.title}">
                         <div class="gallery-card-content">
-                            <h3 class="gallery-card-title">${item.title}</h3>
-                            <p class="gallery-card-subtitle">${item.description}</p>
+                            <h3 class="gallery-card-title">${previewImage.title}</h3>
+                            <p class="gallery-card-subtitle">${previewImage.description}</p>
                         </div>
                     </div>
                 `;
@@ -456,11 +492,10 @@ function loadGalleryCards() {
                 observer.observe(el);
 
                 const img = el.querySelector('img');
-                const title = el.querySelector('.gallery-card-title').textContent;
-                const description = el.querySelector('.gallery-card-subtitle').textContent;
                 if (img) {
                     img.addEventListener('click', () => {
-                        openGalleryLightbox(img.src, title, description);
+                        const images = JSON.parse(el.getAttribute('data-gallery-images') || '[]');
+                        openGalleryLightbox(images, 0);
                     });
                 }
             });
@@ -479,6 +514,11 @@ function createGalleryLightbox() {
     lightbox.innerHTML = `
         <div class="gallery-lightbox-inner">
             <button class="gallery-lightbox-close" aria-label="Fermer la galerie">&times;</button>
+            <div class="gallery-lightbox-nav">
+                <button class="gallery-lightbox-prev" aria-label="Image précédente">&#10094;</button>
+                <button class="gallery-lightbox-next" aria-label="Image suivante">&#10095;</button>
+            </div>
+            <div class="gallery-lightbox-counter"></div>
             <img class="gallery-lightbox-image" src="" alt="">
             <div class="gallery-lightbox-caption">
                 <h3></h3>
@@ -489,7 +529,35 @@ function createGalleryLightbox() {
     document.body.appendChild(lightbox);
 
     const closeButton = lightbox.querySelector('.gallery-lightbox-close');
-    const inner = lightbox.querySelector('.gallery-lightbox-inner');
+    const prevButton = lightbox.querySelector('.gallery-lightbox-prev');
+    const nextButton = lightbox.querySelector('.gallery-lightbox-next');
+    const image = lightbox.querySelector('.gallery-lightbox-image');
+    const captionTitle = lightbox.querySelector('.gallery-lightbox-caption h3');
+    const captionText = lightbox.querySelector('.gallery-lightbox-caption p');
+    const counter = lightbox.querySelector('.gallery-lightbox-counter');
+
+    const renderCurrentImage = () => {
+        if (!galleryLightboxState.items.length) return;
+
+        const item = galleryLightboxState.items[galleryLightboxState.currentIndex];
+        image.src = item.src;
+        image.alt = item.title || '';
+        captionTitle.textContent = item.title || '';
+        captionText.textContent = item.description || '';
+
+        if (galleryLightboxState.items.length > 1) {
+            counter.textContent = `${galleryLightboxState.currentIndex + 1} / ${galleryLightboxState.items.length}`;
+            prevButton.style.display = 'flex';
+            nextButton.style.display = 'flex';
+        } else {
+            counter.textContent = '';
+            prevButton.style.display = 'none';
+            nextButton.style.display = 'none';
+        }
+
+        prevButton.classList.toggle('disabled', galleryLightboxState.currentIndex === 0);
+        nextButton.classList.toggle('disabled', galleryLightboxState.currentIndex === galleryLightboxState.items.length - 1);
+    };
 
     closeButton.addEventListener('click', () => {
         lightbox.classList.remove('open');
@@ -501,24 +569,89 @@ function createGalleryLightbox() {
         }
     });
 
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && lightbox.classList.contains('open')) {
+    prevButton.addEventListener('click', () => {
+        if (galleryLightboxState.currentIndex > 0) {
+            galleryLightboxState.currentIndex -= 1;
+            renderCurrentImage();
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        if (galleryLightboxState.currentIndex < galleryLightboxState.items.length - 1) {
+            galleryLightboxState.currentIndex += 1;
+            renderCurrentImage();
+        } else {
             lightbox.classList.remove('open');
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (!lightbox.classList.contains('open')) return;
+
+        if (event.key === 'Escape') {
+            lightbox.classList.remove('open');
+        } else if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            if (galleryLightboxState.currentIndex < galleryLightboxState.items.length - 1) {
+                galleryLightboxState.currentIndex += 1;
+                renderCurrentImage();
+            } else {
+                lightbox.classList.remove('open');
+            }
+        } else if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            if (galleryLightboxState.currentIndex > 0) {
+                galleryLightboxState.currentIndex -= 1;
+                renderCurrentImage();
+            }
         }
     });
 }
 
-function openGalleryLightbox(src, title, description) {
+function openGalleryLightbox(images, startIndex = 0) {
     createGalleryLightbox();
     const lightbox = document.querySelector('.gallery-lightbox');
+
+    galleryLightboxState.items = Array.isArray(images) ? images : [images];
+    galleryLightboxState.currentIndex = Math.min(Math.max(0, startIndex), Math.max(0, galleryLightboxState.items.length - 1));
+
     const image = lightbox.querySelector('.gallery-lightbox-image');
     const captionTitle = lightbox.querySelector('.gallery-lightbox-caption h3');
     const captionText = lightbox.querySelector('.gallery-lightbox-caption p');
+    const counter = lightbox.querySelector('.gallery-lightbox-counter');
+    const prevButton = lightbox.querySelector('.gallery-lightbox-prev');
+    const nextButton = lightbox.querySelector('.gallery-lightbox-next');
 
-    image.src = src;
-    image.alt = title;
-    captionTitle.textContent = title;
-    captionText.textContent = description;
+    if (!galleryLightboxState.items.length) {
+        image.src = '';
+        image.alt = '';
+        captionTitle.textContent = '';
+        captionText.textContent = '';
+        counter.textContent = '';
+        prevButton.style.display = 'none';
+        nextButton.style.display = 'none';
+        lightbox.classList.add('open');
+        return;
+    }
+
+    const currentItem = galleryLightboxState.items[galleryLightboxState.currentIndex];
+    image.src = currentItem.src;
+    image.alt = currentItem.title || '';
+    captionTitle.textContent = currentItem.title || '';
+    captionText.textContent = currentItem.description || '';
+
+    if (galleryLightboxState.items.length > 1) {
+        counter.textContent = `${galleryLightboxState.currentIndex + 1} / ${galleryLightboxState.items.length}`;
+        prevButton.style.display = 'flex';
+        nextButton.style.display = 'flex';
+    } else {
+        counter.textContent = '';
+        prevButton.style.display = 'none';
+        nextButton.style.display = 'none';
+    }
+
+    prevButton.classList.toggle('disabled', galleryLightboxState.currentIndex === 0);
+    nextButton.classList.toggle('disabled', galleryLightboxState.currentIndex === galleryLightboxState.items.length - 1);
     lightbox.classList.add('open');
 }
 

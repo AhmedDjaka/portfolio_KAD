@@ -1415,11 +1415,26 @@ a:hover {
 }
 
 .gallery-card {
+    position: relative;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(0, 212, 255, 0.1);
     border-radius: 15px;
     overflow: hidden;
     transition: var(--transition);
+}
+
+.gallery-card-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    background: rgba(0, 212, 255, 0.16);
+    color: var(--white);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+    backdrop-filter: blur(8px);
 }
 
 .gallery-card:hover {
@@ -1468,6 +1483,60 @@ a:hover {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.gallery-lightbox-nav {
+    position: absolute;
+    inset: 50% 1rem auto;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.gallery-lightbox-prev,
+.gallery-lightbox-next {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    font-size: 1.3rem;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-lightbox-prev:hover,
+.gallery-lightbox-next:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.04);
+}
+
+.gallery-lightbox-prev.disabled,
+.gallery-lightbox-next.disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+}
+
+.gallery-lightbox-counter {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    z-index: 2;
+    background: rgba(5, 8, 16, 0.75);
+    color: var(--white);
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(8px);
 }
 
 .gallery-lightbox-image {

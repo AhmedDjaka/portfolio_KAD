@@ -1,5 +1,15 @@
 [
   {
+  "title": "FAIRE-PART DE DÉCÈS",
+  "description": "Flyers du programme et membre familiale du défunt.",
+  "images": [
+    { "file": "../images/images_graphique/FFFF1.png", "title": "Photo 1", "description": "..." },
+    { "file": "../images/images_graphique/FFFF2.png", "title": "Photo 2", "description": "..." },
+    { "file": "../images/images_graphique/FFFF3.png", "title": "Photo 3", "description": "..." },
+    { "file": "../images/images_graphique/FFFF4.png", "title": "Photo 4", "description": "..." }
+  ]
+},
+  {
     "file": "../images/images_graphique/graphique-1.png",
     "title": "Création graphique 1",
     "description": "Affiche ou visuel marketing."
